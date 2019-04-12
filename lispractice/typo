@@ -1,0 +1,11 @@
+p 80-> launch file
+たぶん　<remap from="image" to="image_raw" />はいらない.
+
+p 84-> 最後のコマンド
+cd ~/vision_ws/src じゃなくて cd ~/vision_ws/my_cv_pkg/ では？
+
+p 84-> 
+MyCvPkg mcp; -> MyCvPkg mcp();
+では？
+
+
