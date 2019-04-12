@@ -5,26 +5,27 @@ from geometry_msgs.msg import Twist
 from kobuki_msgs.msg import BumperEvent
 from sensor_msgs.msg import LaserScan
 
+
+#ref: https://qiita.com/MENDY/items/e842e3c3ad7fe98c12a0
+class WallTracker():
+
+    def __init__(self):
+        self.pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
+        self.sub = rospy.Subscriber('/scan', LaserScan, self.callback)
+        self.sensor_data = {"right": 0, "center": 0, "left": 0}
+
+    def callback(self, msg):
+        self.sensor_data["right"] = msg.ranges[0]
+        self.sensor_data["center"] = msg.ranges[318]
+        self.sensor_data["left"] = msg.ranges[639]
+
 def main():
-    sensor_data = {"right": 0, "center": 0, "left": 0}
-    rospy.init_node('scanner')
-
-    def callback(data):
-        sensor_data["right"] = data.ranges[0]
-        sensor_data["center"] = data.ranges[319]
-        sensor_data["left"] = data.ranges[639]
-
-    sub = rospy.Subscriber('/scan', LaserScan, callback)
-
+    rospy.init_node('wall_tracker')
+    wt = WallTracker()
     while not rospy.is_shutdown():
-        rospy.loginfo("%f", sensor_data["right"])
+        rospy.loginfo("%f", wt.sensor_data["right"])
 
 main()
-
-
-    
-
-
 
 
 
